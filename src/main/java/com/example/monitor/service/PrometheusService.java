@@ -1,5 +1,6 @@
 package com.example.monitor.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -9,6 +10,7 @@ public class PrometheusService {
 
     private final WebClient webClient;
 
+    @Autowired
     public PrometheusService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
     }
