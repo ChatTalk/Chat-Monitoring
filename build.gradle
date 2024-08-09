@@ -19,16 +19,25 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // web dashboard
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // prometheus client
-    implementation 'io.prometheus:simpleclient:0.16.0'
-    implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
-    implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
+    // WebClient 사용을 위한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // for saving data
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // prometheus client: 얘는 애플리케이션 서버에 세팅해야 하는 거임
+//    implementation 'io.prometheus:simpleclient:0.16.0'
+//    implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
+//    implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
 }
 
 tasks.named('test') {
