@@ -10,11 +10,8 @@ public class PrometheusService {
 
     private final WebClient webClient;
 
-    @Value("${prometheus.url}")
-    private String prometheusUrl;
-
     public PrometheusService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(prometheusUrl).build();
+        this.webClient = webClientBuilder.build();
     }
 
     public Mono<String> fetchMetrics() {
