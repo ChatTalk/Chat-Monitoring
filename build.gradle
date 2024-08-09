@@ -21,6 +21,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // web dashboard
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // prometheus client
+    implementation 'io.prometheus:simpleclient:0.16.0'
+    implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
+    implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
 }
 
 tasks.named('test') {
