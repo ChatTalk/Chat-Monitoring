@@ -2,7 +2,7 @@ package com.example.monitor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,10 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class PrometheusService {
 
     private final WebClient webClient;
+
+    @Autowired
+    public PrometheusService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.build();
+    }
 
     public Mono<List<String>> fetchMetrics() {
         List<String> queryParams = new ArrayList<>();
