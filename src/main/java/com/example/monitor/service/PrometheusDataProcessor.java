@@ -1,17 +1,13 @@
 package com.example.monitor.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PrometheusDataProcessor {
 
     private final PrometheusService prometheusService;
-
-    @Autowired
-    public PrometheusDataProcessor(PrometheusService prometheusService) {
-        this.prometheusService = prometheusService;
-    }
 
     public void processMetrics() {
         prometheusService.fetchMetrics()
