@@ -1,5 +1,7 @@
 package com.example.monitor.service;
 
+import com.example.monitor.entity.Metric;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class PrometheusService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Mono<List<String>> fetchMetrics() {
+    public Mono<List<Metric>> fetchMetrics() {
         List<String> queryParams = List.of(
                 "book_get_count_total[5h]",
                 "books_get_count_total[5h]",
@@ -34,6 +36,7 @@ public class PrometheusService {
 
         return Flux.fromIterable(queryParams)
                 .flatMap(this::fetchMetric)
+                .flatMap(this::parseMetrics)
                 .collectList();
     }
 
@@ -63,6 +66,45 @@ public class PrometheusService {
         } catch (Exception e) {
             e.printStackTrace();
             return "{}";
+        }
+    }
+
+    private Flux<Metric> parseMetrics(String jsonResponse) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            List<Metric> entities = new ArrayList<>();
+
+            for (JsonNode metricNode : rootNode.path("data").path("result")) {
+                JsonNode metric = metricNode.path("metric");
+                String application = metric.path("application").asText();
+                String className = metric.path("class").asText();
+                String instance = metric.path("instance").asText();
+                String method = metric.path("method").asText();
+                String exception = metric.path("exception").asText();
+
+                long occurrenceCount = 1;
+                long exceptionCount = exception.equals("none") ? 0 : 1;
+
+                // 기존 엔티티가 존재하는지 확인하고 업데이트
+                Metric existingEntity = entities.stream()
+                        .filter(e -> e.getApplication().equals(application)
+                                && e.getClassName().equals(className)
+                                && e.getInstance().equals(instance)
+                                && e.getMethod().equals(method))
+                        .findFirst()
+                        .orElse(null);
+
+                if (existingEntity != null) {
+                    existingEntity.setOccurrenceCount(existingEntity.getOccurrenceCount() + 1);
+                    existingEntity.setExceptionCount(existingEntity.getExceptionCount() + exceptionCount);
+                } else {
+                    entities.add(new Metric(application, className, instance, method, occurrenceCount, exceptionCount));
+                }
+            }
+            return Flux.fromIterable(entities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Flux.error(e);
         }
     }
 }
