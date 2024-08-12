@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -20,26 +18,14 @@ public class Metric {
     private String application;
 
     @Column(nullable = false)
-    private String className;
-
-    @Column(nullable = false)
-    private String exception;
-
-    @Column(nullable = false)
-    private String instance;
-
-    @Column(nullable = false)
-    private String job;
-
-    @Column(nullable = false)
     private String method;
 
     @Column(nullable = false)
-    private String result;
+    private long totalCalls;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private long exceptionCount;
 
     @Column(nullable = false)
-    private String value;
+    private double averageCalls;
 }
