@@ -1,6 +1,7 @@
 package com.example.monitor.service;
 
 import com.example.monitor.entity.Metric;
+import com.example.monitor.repository.MetricRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -19,11 +20,13 @@ public class PrometheusService {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
+    private final MetricRepository metricRepository;
 
     @Autowired
-    public PrometheusService(WebClient.Builder webClientBuilder) {
+    public PrometheusService(WebClient.Builder webClientBuilder, MetricRepository metricRepository) {
         this.webClient = webClientBuilder.build();
         this.objectMapper = new ObjectMapper();
+        this.metricRepository = metricRepository;
     }
 
     public Mono<List<Metric>> fetchMetrics() {
@@ -101,6 +104,9 @@ public class PrometheusService {
                     entities.add(new Metric(application, className, instance, method, occurrenceCount, exceptionCount));
                 }
             }
+
+            metricRepository.saveAll(entities);
+
             return Flux.fromIterable(entities);
         } catch (Exception e) {
             e.printStackTrace();
