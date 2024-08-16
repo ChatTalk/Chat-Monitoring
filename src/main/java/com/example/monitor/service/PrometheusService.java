@@ -29,17 +29,17 @@ public class PrometheusService {
         this.metricRepository = metricRepository;
     }
 
-    public Mono<List<Metric>> fetchMetrics() {
+    public Mono<List<String>> fetchMetrics() {
         List<String> queryParams = List.of(
-                "book_get_count_total[5h]",
-                "books_get_count_total[5h]",
-                "loan_create_count_total[5h]",
-                "loan_update_count_total[5h]"
+                "book_get_count_total[30s]",
+                "book_get_timed_seconds_sum[30s]",
+                "books_get_count_total[30s]",
+                "books_get_timed_seconds_sum[30s]"
         );
 
         return Flux.fromIterable(queryParams)
                 .flatMap(this::fetchMetric)
-                .flatMap(this::parseMetrics)
+//                .flatMap(this::parseMetrics)
                 .collectList();
     }
 
@@ -88,24 +88,24 @@ public class PrometheusService {
                 long occurrenceCount = 1;
                 long exceptionCount = exception.equals("none") ? 0 : 1;
 
-                // 기존 엔티티가 존재하는지 확인하고 업데이트
-                Metric existingEntity = entities.stream()
-                        .filter(e -> e.getApplication().equals(application)
-                                && e.getClassName().equals(className)
-                                && e.getInstance().equals(instance)
-                                && e.getMethod().equals(method))
-                        .findFirst()
-                        .orElse(null);
-
-                if (existingEntity != null) {
-                    existingEntity.setOccurrenceCount(existingEntity.getOccurrenceCount() + 1);
-                    existingEntity.setExceptionCount(existingEntity.getExceptionCount() + exceptionCount);
-                } else {
-                    entities.add(new Metric(application, className, instance, method, occurrenceCount, exceptionCount));
-                }
+//                // 기존 엔티티가 존재하는지 확인하고 업데이트
+//                Metric existingEntity = entities.stream()
+//                        .filter(e -> e.getApplication().equals(application)
+//                                && e.getClassName().equals(className)
+//                                && e.getInstance().equals(instance)
+//                                && e.getMethod().equals(method))
+//                        .findFirst()
+//                        .orElse(null);
+//
+//                if (existingEntity != null) {
+//                    existingEntity.setOccurrenceCount(existingEntity.getOccurrenceCount() + 1);
+//                    existingEntity.setExceptionCount(existingEntity.getExceptionCount() + exceptionCount);
+//                } else {
+//                    entities.add(new Metric(application, className, instance, method, occurrenceCount, exceptionCount));
+//                }
             }
 
-            metricRepository.saveAll(entities);
+//            metricRepository.saveAll(entities);
 
             return Flux.fromIterable(entities);
         } catch (Exception e) {

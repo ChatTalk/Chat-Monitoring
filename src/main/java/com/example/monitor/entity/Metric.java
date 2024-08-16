@@ -5,41 +5,46 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 public class Metric {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "metirc_id")
     private Long id;
 
-    @Column(name = "application")
-    private String application;
-
-    @Column(name = "class_name")
-    private String className;
-
-    @Column(name = "instance")
+    @Column(nullable = false)
     private String instance;
 
-    @Column(name = "method")
-    private String method;
+    @Column(nullable = false)
+    private String application;
 
-    @Column(name = "occurrence")
-    private long occurrenceCount;
+    @Column(nullable = false)
+    private String className;
 
-    @Column(name = "exception")
-    private long exceptionCount;
+    @Column(nullable = false)
+    private String methodName;
 
-    public Metric(String application, String className, String instance, String method, long occurrenceCount, long exceptionCount) {
-        this.application = application;
-        this.className = className;
-        this.instance = instance;
-        this.method = method;
-        this.occurrenceCount = occurrenceCount;
-        this.exceptionCount = exceptionCount;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MetricType metricType; // RATE or AVERAGE_TIME
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ResultType resultType; // SUCCESS or FAILURE
+
+    @Column
+    private Double value; // 메트릭 타입에 따른 값
+
+    public enum MetricType {
+        RATE,          // 시간당 호출 빈도수
+        AVERAGE_TIME   // 평균 응답 시간
+    }
+
+    public enum ResultType {
+        SUCCESS,
+        FAILURE
     }
 }
