@@ -22,7 +22,7 @@ public class MetricDataProcessor {
                                             "MetricType: %s, " +
                                             "ResultType: %s, " +
                                             "Exception: %s, " +
-                                            "Value: %f" +
+                                            "Value: %f, " +
                                             "TimeStamp: %s"
                                     ,
                                     metric.getInstance(),
