@@ -1,5 +1,6 @@
 package com.example.monitor.process;
 
+import com.example.monitor.handler.Handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,34 +9,13 @@ import org.springframework.stereotype.Service;
 public class MetricDataProcessor {
 
     private final MetricDataCollector metricDataCollector;
+    private final Handler handlerChain;
 
     public void processMetrics() {
         metricDataCollector.fetchMetrics()
-                .subscribe(response -> {
+                .subscribe(response ->
                     // JSON 파싱 및 데이터 처리 로직 추가
-                    response.stream()
-                            .map(metric -> String.format(
-                                    "Instance: %s, " +
-                                            "Application: %s, " +
-                                            "ClassName: %s, " +
-                                            "MethodName: %s, " +
-                                            "MetricType: %s, " +
-                                            "ResultType: %s, " +
-                                            "Exception: %s, " +
-                                            "Value: %f, " +
-                                            "TimeStamp: %s"
-                                    ,
-                                    metric.getInstance(),
-                                    metric.getApplication(),
-                                    metric.getClassName(),
-                                    metric.getMethodName(),
-                                    metric.getMetricType(),
-                                    metric.getResultType(),
-                                    metric.getException(),
-                                    metric.getValue(),
-                                    metric.getTime()
-                            ))
-                            .forEach(System.out::println); // 변환된 문자열을 출력
-                });
+                    response.forEach(handlerChain::handle)
+                );
     }
 }
