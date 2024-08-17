@@ -51,10 +51,10 @@ public class MetricDataCollector {
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("Error response: " + errorBody)))
                 )
                 .bodyToMono(String.class)
-                .doOnNext(json -> {
-                    // 쿼리로 얻은 JSON 메트릭 데이터 로그 출력
-                    System.out.println("Received JSON for query: " + query + "\n" + json);
-                })
+//                .doOnNext(json -> {
+//                    // 쿼리로 얻은 JSON 메트릭 데이터 로그 출력
+//                    System.out.println("Received JSON for query: " + query + "\n" + json);
+//                })
                 .flatMapMany(json -> {
                     // MetricType 쿼리 종류에 맞게 설정
                     Metric.MetricType metricType = queryEnum.getMetricType();
