@@ -1,8 +1,7 @@
-package com.example.monitor.service;
+package com.example.monitor.process;
 
 import com.example.monitor.dto.Metric;
 import com.example.monitor.query.Query;
-import com.example.monitor.util.MetricParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -17,13 +16,13 @@ public class MetricDataCollector {
 
     private final WebClient webClient;
     private final List<Query> queryList;
-    private final MetricParser metricParser;
+    private final MetricDataParser metricDataParser;
 
     @Autowired
-    public MetricDataCollector(WebClient.Builder webClientBuilder, List<Query> queryList, MetricParser metricParser) {
+    public MetricDataCollector(WebClient.Builder webClientBuilder, List<Query> queryList, MetricDataParser metricDataParser) {
         this.webClient = webClientBuilder.build();
         this.queryList = queryList;
-        this.metricParser = metricParser;
+        this.metricDataParser = metricDataParser;
     }
 
     public Mono<List<Metric>> fetchMetrics() {
@@ -61,7 +60,7 @@ public class MetricDataCollector {
                     Metric.MetricType metricType = queryEnum.getMetricType();
 
                     // JSON 파싱하여 Metric 리스트를 반환
-                    List<Metric> metrics = metricParser.parseMetrics(json, metricType);
+                    List<Metric> metrics = metricDataParser.parseMetrics(json, metricType);
                     return Flux.fromIterable(metrics); // 여러 개의 Metric 반환
                 });
     }

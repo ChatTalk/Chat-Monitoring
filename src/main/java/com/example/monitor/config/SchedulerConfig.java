@@ -1,6 +1,6 @@
 package com.example.monitor.config;
 
-import com.example.monitor.service.MetricDataProcessor;
+import com.example.monitor.process.MetricDataProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

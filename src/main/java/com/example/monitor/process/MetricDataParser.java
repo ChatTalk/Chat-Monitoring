@@ -1,4 +1,4 @@
-package com.example.monitor.util;
+package com.example.monitor.process;
 
 import com.example.monitor.dto.Metric;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,12 +15,12 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class MetricParser {
+public class MetricDataParser {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final ObjectMapper objectMapper;
 
-    public MetricParser() {
+    public MetricDataParser() {
         this.objectMapper = new ObjectMapper();
     }
 

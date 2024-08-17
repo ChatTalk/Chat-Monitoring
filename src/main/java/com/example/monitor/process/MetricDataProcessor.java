@@ -1,4 +1,4 @@
-package com.example.monitor.service;
+package com.example.monitor.process;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
