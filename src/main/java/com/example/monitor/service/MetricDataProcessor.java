@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PrometheusDataProcessor {
+public class MetricDataProcessor {
 
-    private final PrometheusService prometheusService;
+    private final MetricDataCollector metricDataCollector;
 
     public void processMetrics() {
-        prometheusService.fetchMetrics()
+        metricDataCollector.fetchMetrics()
                 .subscribe(response -> {
                     // JSON 파싱 및 데이터 처리 로직 추가
                     response.stream()
@@ -25,7 +25,7 @@ public class PrometheusDataProcessor {
                                                 "ResultType: %s, " +
                                                 "Exception: %s, " +
                                                 "Value: %f" +
-                                                "TimeStamp: "
+                                                "TimeStamp: %s"
                                         ,
                                         metric.getInstance(),
                                         metric.getApplication(),
@@ -35,7 +35,7 @@ public class PrometheusDataProcessor {
                                         metric.getResultType(),
                                         metric.getException(),
                                         metric.getValue(),
-                                        metric.getTimestamp()
+                                        metric.getTime()
                                 );
                             })
                             .forEach(System.out::println); // 변환된 문자열을 출력

@@ -13,14 +13,14 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-public class PrometheusService {
+public class MetricDataCollector {
 
     private final WebClient webClient;
     private final List<Query> queryList;
     private final MetricParser metricParser;
 
     @Autowired
-    public PrometheusService(WebClient.Builder webClientBuilder, List<Query> queryList, MetricParser metricParser) {
+    public MetricDataCollector(WebClient.Builder webClientBuilder, List<Query> queryList, MetricParser metricParser) {
         this.webClient = webClientBuilder.build();
         this.queryList = queryList;
         this.metricParser = metricParser;
