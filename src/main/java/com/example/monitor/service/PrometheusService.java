@@ -1,6 +1,7 @@
 package com.example.monitor.service;
 
 import com.example.monitor.query.CallCountQuery;
+import com.example.monitor.query.Query;
 import com.example.monitor.repository.MetricRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -17,25 +18,22 @@ import java.util.List;
 public class PrometheusService {
 
     private final WebClient webClient;
-    private final ObjectMapper objectMapper;
-    private final MetricRepository metricRepository;
+    private final List<Query> queryList;
 
     @Autowired
-    public PrometheusService(WebClient.Builder webClientBuilder, MetricRepository metricRepository) {
+    public PrometheusService(WebClient.Builder webClientBuilder, MetricRepository metricRepository, List<Query> queryList) {
         this.webClient = webClientBuilder.build();
-        this.objectMapper = new ObjectMapper();
-        this.metricRepository = metricRepository;
+        this.queryList = queryList;
     }
 
     public Mono<List<String>> fetchMetrics() {
-        return Flux.fromArray(CallCountQuery.values())
-                .flatMap(this::fetchMetric)
-//                .flatMap(this::parseMetrics)
-                .collectList();
+        return Flux.fromIterable(queryList) // List<Query>를 순회
+                .flatMap(this::fetchMetric) // 각 쿼리를 수행
+                .collectList(); // 결과를 리스트로 수집
     }
 
-    private Mono<String> fetchMetric(CallCountQuery callCountQueryEnum) {
-        String query = callCountQueryEnum.getPrometheusQuery();
+    private Mono<String> fetchMetric(Query queryEnum) {
+        String query = queryEnum.getPrometheusQuery();
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -49,19 +47,19 @@ public class PrometheusService {
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("Error response: " + errorBody)))
                 )
                 .bodyToMono(String.class);
-//                .map(this::formatJson);
+        // .map(this::formatJson); // 필요한 경우 포맷팅 추가
     }
-
-    private String formatJson(String responseBody) {
-        try {
-            Object json = objectMapper.readValue(responseBody, Object.class);
-            ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
-            return writer.writeValueAsString(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "{}";
-        }
-    }
+//
+//    private String formatJson(String responseBody) {
+//        try {
+//            Object json = objectMapper.readValue(responseBody, Object.class);
+//            ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
+//            return writer.writeValueAsString(json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "{}";
+//        }
+//    }
 
 //    private Flux<Metric> parseMetrics(String jsonResponse) {
 //        try {
