@@ -26,6 +26,7 @@ public class Metric {
     }
 
     public enum ResultType {
+        NONE, // timed 기반 커스텀 메트릭은 result 없음
         SUCCESS,
         FAILURE
     }

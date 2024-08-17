@@ -50,9 +50,15 @@ public class MetricDataParser {
                     String time = timestamp.format(FORMATTER);
 
                     // ResultType 결정
-                    Metric.ResultType resultType = "success".equalsIgnoreCase(result) ?
-                            Metric.ResultType.SUCCESS :
-                            Metric.ResultType.FAILURE;
+                    Metric.ResultType resultType = null;
+
+                    if (metricType.equals(Metric.MetricType.CALL_COUNT)) {
+                        resultType = "success".equalsIgnoreCase(result) ?
+                                Metric.ResultType.SUCCESS :
+                                Metric.ResultType.FAILURE;
+                    } else if (metricType.equals(Metric.MetricType.AVERAGE_TIME)){
+                        resultType = Metric.ResultType.NONE;
+                    }
 
                     // Metric DTO 생성
                     Metric metric = new Metric(instance, application, className, methodName, metricType, resultType, exception, value, time);
