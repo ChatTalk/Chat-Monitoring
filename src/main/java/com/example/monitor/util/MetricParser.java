@@ -4,8 +4,6 @@ import com.example.monitor.dto.Metric;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -63,7 +61,7 @@ public class MetricParser {
             }
         } catch (Exception e) {
             // JSON 파싱 중 예외 발생 시 로깅
-            System.err.println("Error parsing JSON response: " + e.getMessage());
+            log.error("Error parsing JSON response: {}", e.getMessage());
         }
 
         return metrics;
