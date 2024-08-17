@@ -1,9 +1,7 @@
 package com.example.monitor.service;
 
-import com.example.monitor.constant.Query;
-import com.example.monitor.entity.Metric;
+import com.example.monitor.constant.CallCountQuery;
 import com.example.monitor.repository.MetricRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,14 +28,14 @@ public class PrometheusService {
     }
 
     public Mono<List<String>> fetchMetrics() {
-        return Flux.fromArray(Query.values())
+        return Flux.fromArray(CallCountQuery.values())
                 .flatMap(this::fetchMetric)
 //                .flatMap(this::parseMetrics)
                 .collectList();
     }
 
-    private Mono<String> fetchMetric(Query queryEnum) {
-        String query = queryEnum.getPrometheusQuery();
+    private Mono<String> fetchMetric(CallCountQuery callCountQueryEnum) {
+        String query = callCountQueryEnum.getPrometheusQuery();
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
