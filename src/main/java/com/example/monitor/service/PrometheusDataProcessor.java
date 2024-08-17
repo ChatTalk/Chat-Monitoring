@@ -17,7 +17,14 @@ public class PrometheusDataProcessor {
                             .map(metric -> {
                                 // 각 Metric 객체의 필드를 추출하고 필요한 변환을 수행합니다.
                                 return String.format(
-                                        "Instance: %s, Application: %s, ClassName: %s, MethodName: %s, MetricType: %s, ResultType: %s, Exception: %s, Value: %f",
+                                        "Instance: %s, " +
+                                                "Application: %s, " +
+                                                "ClassName: %s, " +
+                                                "MethodName: %s, " +
+                                                "MetricType: %s, " +
+                                                "ResultType: %s, " +
+                                                "Exception: %s, " +
+                                                "Value: %f",
                                         metric.getInstance(),
                                         metric.getApplication(),
                                         metric.getClassName(),
