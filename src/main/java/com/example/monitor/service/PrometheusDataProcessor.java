@@ -24,7 +24,9 @@ public class PrometheusDataProcessor {
                                                 "MetricType: %s, " +
                                                 "ResultType: %s, " +
                                                 "Exception: %s, " +
-                                                "Value: %f",
+                                                "Value: %f" +
+                                                "TimeStamp: "
+                                        ,
                                         metric.getInstance(),
                                         metric.getApplication(),
                                         metric.getClassName(),
@@ -32,7 +34,8 @@ public class PrometheusDataProcessor {
                                         metric.getMetricType(),
                                         metric.getResultType(),
                                         metric.getException(),
-                                        metric.getValue()
+                                        metric.getValue(),
+                                        metric.getTimestamp()
                                 );
                             })
                             .forEach(System.out::println); // 변환된 문자열을 출력

@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Component
 public class MetricParser {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final ObjectMapper objectMapper;
 
     public MetricParser() {
@@ -46,6 +49,7 @@ public class MetricParser {
                     String exception = metricNode.path("exception").asText();
                     String result = metricNode.path("result").asText();
                     Double value = valueNode.get(1).asDouble();
+                    String time = timestamp.format(FORMATTER);
 
                     // ResultType 결정
                     Metric.ResultType resultType = "success".equalsIgnoreCase(result) ?
@@ -53,7 +57,7 @@ public class MetricParser {
                             Metric.ResultType.FAILURE;
 
                     // Metric DTO 생성
-                    Metric metric = new Metric(instance, application, className, methodName, metricType, resultType, exception, value, timestamp);
+                    Metric metric = new Metric(instance, application, className, methodName, metricType, resultType, exception, value, time);
                     metrics.add(metric);
                 }
             }
