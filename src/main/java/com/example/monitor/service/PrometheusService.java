@@ -48,8 +48,8 @@ public class PrometheusService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(errorBody -> Mono.error(new RuntimeException("Error response: " + errorBody)))
                 )
-                .bodyToMono(String.class)
-                .map(this::formatJson);
+                .bodyToMono(String.class);
+//                .map(this::formatJson);
     }
 
     private String formatJson(String responseBody) {
