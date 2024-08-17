@@ -8,7 +8,7 @@ import com.example.monitor.dto.Metric;
 public abstract class Handler {
 
     // 다음 체인으로 연결될 핸들러
-    protected Handler nextHandler = null;
+    protected Handler nextHandler = null; // 처음 생성 당시에는 후순위 연결 핸들러가 없으니 null 초기화
 
     // 생성자를 통해 연결시킬 핸들러를 순서대로 등록
     public Handler setNext(Handler handler) {
@@ -20,11 +20,11 @@ public abstract class Handler {
     protected abstract void process(Metric metric);
 
     // 핸들러가 요청에 대해 처리하는 메서드
-    public void run(Metric metric) {
+    public void handle(Metric metric) {
         process(metric);
 
         // 만일 핸들러가 연결된게 있다면 다음 핸들러로 책임을 떠넘긴다
         if (nextHandler != null)
-            nextHandler.run(metric);
+            nextHandler.handle(metric);
     }
 }
