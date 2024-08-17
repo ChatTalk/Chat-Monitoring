@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Metric {
+public class MetricEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
