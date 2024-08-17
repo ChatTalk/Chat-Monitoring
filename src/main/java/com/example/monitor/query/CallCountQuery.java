@@ -1,4 +1,4 @@
-package com.example.monitor.constant;
+package com.example.monitor.query;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

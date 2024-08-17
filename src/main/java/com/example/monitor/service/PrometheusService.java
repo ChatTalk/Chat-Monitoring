@@ -1,6 +1,6 @@
 package com.example.monitor.service;
 
-import com.example.monitor.constant.CallCountQuery;
+import com.example.monitor.query.CallCountQuery;
 import com.example.monitor.repository.MetricRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
