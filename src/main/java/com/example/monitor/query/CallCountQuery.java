@@ -1,5 +1,6 @@
 package com.example.monitor.query;
 
+import com.example.monitor.dto.Metric;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,5 +15,10 @@ public enum CallCountQuery implements Query {
     @Override
     public String getPrometheusQuery() {
         return "sum(rate(" + queryParam + "[30s])) by (application, class, exception, instance, job, method, result)";
+    }
+
+    @Override
+    public Metric.MetricType getMetricType() {
+        return Metric.MetricType.CALL_COUNT;
     }
 }
