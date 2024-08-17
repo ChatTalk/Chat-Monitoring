@@ -1,4 +1,4 @@
-package com.example.monitor.prometheus.query;
+package com.example.monitor.query;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
