@@ -35,6 +35,9 @@ dependencies {
     // for saving data
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // Discord
+    implementation 'net.dv8tion:JDA:5.0.1'
+
     // prometheus client: 얘는 애플리케이션 서버에 세팅해야 하는 거임
 //    implementation 'io.prometheus:simpleclient:0.16.0'
 //    implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
