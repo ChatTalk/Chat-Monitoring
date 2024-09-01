@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - network
+
+  db:
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # 향후에 환경변수로 재관리하기
+      MYSQL_DATABASE: monitor            # 생성할 기본 데이터베이스
+      MYSQL_USER: mysql                  # 추가할 사용자 이름
+      MYSQL_PASSWORD: password           # 추가할 사용자의 비밀번호
+      TZ: Asia/Seoul
+    volumes:
+      - '../data/db:/var/lib/mysql'
+    ports:
+      - "3306:3306"
+    networks:
+      - network
+
+  app:
+    build: .
+    ports:
+      - "8081:8080"
+    depends_on:
+      - prometheus
+      - grafana
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/monitor
+      SPRING_DATASOURCE_USERNAME: mysql
+      SPRING_DATASOURCE_PASSWORD: password
+      TZ: Asia/Seoul
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
